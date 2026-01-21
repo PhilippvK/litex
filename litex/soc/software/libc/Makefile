@@ -6,6 +6,8 @@ all: libc.a
 CFLAGS = $(COMMONFLAGS) -Wpragmas
 LIBC_CLEANUP ?= 0
 
+JOBS ?= $(shell nproc)
+
 ifeq ($(CPU), microwatt)
 	CFLAGS += -DLONG_LONG_MIN=LLONG_MIN -DLONG_LONG_MAX=LLONG_MAX -DLONG_LONG_MIN=LLONG_MIN -DULONG_LONG_MAX=ULLONG_MAX
 endif
@@ -55,7 +57,7 @@ __libc.a: cross.txt
 		-Dlibdir=picolibc/$(TRIPLE)/lib \
 		--cross-file cross.txt
 
-	meson compile
+	meson compile -j$(JOBS)
 	cp newlib/libc.a __libc.a
 	if [[ "$(LIBC_CLEANUP)" != "0" ]]; then \
 		meson compile --clean ;\
