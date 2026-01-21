@@ -4,6 +4,7 @@ include $(SOC_DIRECTORY)/software/common.mak
 all: libc.a
 
 CFLAGS = $(COMMONFLAGS) -Wpragmas
+LIBC_CLEANUP ?= 0
 
 ifeq ($(CPU), microwatt)
 	CFLAGS += -DLONG_LONG_MIN=LLONG_MIN -DLONG_LONG_MAX=LLONG_MAX -DLONG_LONG_MIN=LLONG_MIN -DULONG_LONG_MAX=ULLONG_MAX
@@ -56,6 +57,10 @@ __libc.a: cross.txt
 
 	meson compile
 	cp newlib/libc.a __libc.a
+	if [[ "$(LIBC_CLEANUP)" != "0" ]]
+	then
+		meson compile --clean
+	fi
 
 _libc.a: $(LIBC_DIRECTORY)/stdio.c __libc.a
 	$(compile)
@@ -66,3 +71,7 @@ libc.a: $(LIBC_DIRECTORY)/missing.c _libc.a
 	$(compile)
 	$(AR) csr _libc.a $@
 	cp _libc.a libc.a
+	if [[ "$(LIBC_CLEANUP)" != "0" ]]
+	then
+		rm _libc.a __libc.a
+	fi
