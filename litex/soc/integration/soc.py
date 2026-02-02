@@ -1290,7 +1290,8 @@ class LiteXSoC(SoC):
         setattr(self.submodules, name, Identifier(identifier))
 
     # Add UART -------------------------------------------------------------------------------------
-    def add_uart(self, name="uart", uart_name="serial", baudrate=115200, fifo_depth=16):
+    # def add_uart(self, name="uart", uart_name="serial", baudrate=115200, fifo_depth=16):
+    def add_uart(self, name="uart", uart_name="serial", baudrate=115200, fifo_depth=128):
         # Imports.
         from litex.soc.cores.uart import UART, UARTCrossover
 
