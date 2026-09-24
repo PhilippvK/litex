@@ -12,6 +12,10 @@ import subprocess
 
 from litex.build import tools
 
+LITEX_BOARDS_REF = os.environ.get("LITEX_BOARDS_REF", "master")
+# openocd 0.10.0 needs c498f00938bba94fe7ddc27dad9ed84294208201
+# openocd 0.11.0 supports newer commits
+
 
 class GenericProgrammer:
     def __init__(self, flash_proxy_basename=None):
@@ -25,7 +29,7 @@ class GenericProgrammer:
             "https://github.com/quartiq/bscan_spi_bitstreams/raw/master/",
         ]
         self.config_repos = [
-            "https://raw.githubusercontent.com/litex-hub/litex-boards/master/litex_boards/prog/",
+            f"https://raw.githubusercontent.com/litex-hub/litex-boards/{LITEX_BOARDS_REF}/litex_boards/prog/",
         ]
         self.prog_local = "prog"
 
